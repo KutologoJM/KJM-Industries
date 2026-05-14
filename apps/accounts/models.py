@@ -30,8 +30,39 @@ Example:
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from core.models import TimeStampedModel
 
 
 # Create your models here.
 class CustomUser(AbstractUser):
     pass
+
+
+class Department(TimeStampedModel):
+    """
+    Holds key information about the 5 departments in KJM Industries.
+    - Agriculture
+    - Transportation
+    - Manufacturing
+    - Sales
+    - Storage
+    """
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
+
+
+class EmployeeProfile(TimeStampedModel):
+    """
+    User profile for employees working in KJM Industries.
+    """
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name="employees")
+    role = models.CharField(
+        max_length=100,
+        choices=(
+            ("admin", "Admin"),
+            ("manager", "Manager"),
+            ("employee", "Employee"),
+        ),
+        default="employee",
+    )

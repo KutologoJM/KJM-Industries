@@ -30,11 +30,54 @@ Example:
 
 # Shared models
 from django.db import models
+from django_extensions.db.fields import AutoSlugField, ModificationDateTimeField, CreationDateTimeField
+import uuid
 
 
 class TimeStampedModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = CreationDateTimeField()
+    updated_at = ModificationDateTimeField()
+
+    class Meta:
+        abstract = True
+
+
+class TimeStampedUUIDModel(TimeStampedModel):
+    """
+    uid is public-facing while id is for internal use.
+    """
+    uid = models.UUIDField(
+        unique=True,
+        default=uuid.uuid8,
+        editable=False,
+        db_index=True,
+    )
+
+    class Meta:
+        abstract = True
+
+
+class BaseItem(TimeStampedModel):
+    """
+    A common base model for all items that each department will have.
+    Slug instead of uuid to make it easier to reference items in the API.
+    """
+    name = models.CharField(max_length=50)
+    slug = AutoSlugField(populate_from="name")
+    image_url = models.URLField(blank=True, null=True)
+
+    class Meta:
+        abstract = True
+
+
+class BaseFacility(TimeStampedUUIDModel):
+    """
+    A common base model for all facility types.
+    """
+    name = models.CharField(max_length=50)
+    image_url = models.URLField(blank=True, null=True)
+
+    # location
 
     class Meta:
         abstract = True
