@@ -81,7 +81,6 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    # --- Always present ---
     "whitenoise",
     "django_extensions",
     "health_check",
@@ -104,8 +103,9 @@ See: https://docs.djangoproject.com/en/stable/topics/auth/customizing/#substitut
 
 LOCAL_APPS = [
     "apps.accounts.apps.AccountsConfig",
-    "core.apps.CoreConfig",  # abstract models, middleware, shared utilities
+    "core.apps.CoreConfig",
     # Add further local apps here.
+    "apps.storage.apps.StorageConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
