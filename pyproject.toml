@@ -33,7 +33,7 @@ dependencies = [
     # "django-celery-results>=2.0",
     # "django-storages[s3]>=1.14",
     # "boto3>=1.0",
-    # "sentry-sdk>=2.0",
+    "sentry-sdk>=2.44.0",
 ]
 
 [project.optional-dependencies]
